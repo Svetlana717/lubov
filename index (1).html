@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 Валентинка для тебя</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+        }
+
+        h1 {
+            color: #ff416c;
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .question {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background: linear-gradient(135deg, #fff5f7, #ffebee);
+            border: 2px solid #ffb6c1;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #ff416c;
+            transition: all 0.3s;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .option:hover {
+            background: linear-gradient(135deg, #ffebee, #fff5f7);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.2);
+        }
+
+        .option.correct {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            border-color: #ff416c;
+        }
+
+        .option.wrong {
+            background: linear-gradient(135deg, #ffebee, #fff5f7);
+            color: #999;
+            border-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .result {
+            display: none;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .photo-frame {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+            border: 15px solid #ff416c;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-frame::before {
+            content: "♥";
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 40px;
+            color: white;
+            transform: rotate(-20deg);
+        }
+
+        .photo-frame::after {
+            content: "♥";
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 40px;
+            color: white;
+            transform: rotate(20deg);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .angry-frame {
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto 20px;
+            border: 15px solid #ff416c;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .angry-frame::before {
+            content: "👿";
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 40px;
+            color: white;
+            aspect-ratio: 1 / 1;
+            transform: rotate(-20deg);
+        }
+
+        .angry-frame::after {
+            content: "👿";
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 40px;
+            color: white;
+            transform: rotate(20deg);
+        }
+
+        .angry-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+            aspect-ratio: 1 / 1; /* сохраняем квадратную пропорцию */
+            object-fit: cover;
+        }
+
+        .message {
+            font-size: 20px;
+            color: #ff416c;
+            margin-top: 20px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff416c;
+            font-size: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .restart {
+            margin-top: 20px;
+            background: #ff416c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .restart:hover {
+            background: #ff4b2b;
+            transform: scale(1.05);
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal h2 {
+            color: #ff416c;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .modal-button {
+            background: #ff416c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .modal-button:hover {
+            background: #ff4b2b;
+            transform: scale(1.05);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>💌 добрик бобрик утрик бутрик</h1>
+
+    <div id="quiz">
+        <div class="question">угадай как сильно я тя лю</div>
+        <div class="options">
+            <div class="option" onclick="showTryAgain()">очень</div>
+            <div class="option" onclick="showTryAgain()">очень очень</div>
+            <div class="option" onclick="showAngry()">чучуть</div>
+            <div class="option" onclick="showCorrect()">очень очень преочень 💝</div>
+        </div>
+    </div>
+
+    <div id="result-correct" class="result">
+        <div class="photo-frame">
+            <img src="photo.jpg" alt="Наша фотография">
+        </div>
+        <div class="message">
+            есссс 💕<br>
+            очень очень сильно <br>
+            ты мой самый самый любимый! ❤️
+        </div>
+        <button class="restart" onclick="location.reload()">Начать заново</button>
+    </div>
+
+    <div id="result-angry" class="result">
+        <div class="angry-frame">
+            <img src="angry.jpg" alt="Злая фотка">
+        </div>
+        <div class="message">
+            ты чо! 😡<br>
+            совсем не чотко!
+        </div>
+        <button class="restart" onclick="location.reload()">Начать заново</button>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+</div>
+
+<!-- Модальное окно "Попробуй ещё раз" -->
+<div class="modal" id="tryAgainModal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <h2>ну почти! 💭</h2>
+        <p>ты был близок...</p>
+        <button class="modal-button" onclick="closeModal()">лан попробую ещё</button>
+    </div>
+</div>
+
+<script>
+    function showTryAgain() {
+        document.getElementById('tryAgainModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('tryAgainModal').style.display = 'none';
+    }
+
+    function showCorrect() {
+        // Скрываем квиз
+        document.getElementById('quiz').style.display = 'none';
+        // Показываем правильный результат
+        document.getElementById('result-correct').style.display = 'block';
+        // Создаём сердечки
+        createHearts();
+    }
+
+    function showAngry() {
+        // Скрываем квиз
+        document.getElementById('quiz').style.display = 'none';
+        // Показываем злой результат
+        document.getElementById('result-angry').style.display = 'block';
+    }
+
+    function createHearts() {
+        const heartsContainer = document.getElementById('hearts');
+        for (let i = 0; i < 30; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '♥';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heartsContainer.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 3000);
+            }, i * 200);
+        }
+    }
+
+    // Создаём несколько сердечек при загрузке
+    window.onload = function() {
+        setTimeout(createHearts, 500);
+    };
+</script>
+</body>
+</html>
